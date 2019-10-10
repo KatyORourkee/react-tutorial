@@ -24,12 +24,25 @@ class Board extends React.Component {
 
   handleClick(i) {
     const squares = this.state.squares.slice();
+    if (calculateWinner(squares) || squares[i]) {
+      return;
+    }
     squares[i] = this.state.xIsNext? 'X' : 'O';
     this.setState({
       squares: squares,
       xIsNext: !this.state.xIsNext,
     });
+  }
 
+  handleResetClick() {
+    let squares = this.state.squares.slice();
+    squares = squares.fill(null);
+    this.setState(
+      {
+        squares: squares,
+        xIsNext: true,
+      }
+    )
   }
   
   renderSquare(i) {
@@ -52,6 +65,7 @@ class Board extends React.Component {
 
     return (
       <div>
+        <div className="status">Let's play tic-tac-toe!</div>
         <div className="status">{status}</div>
         <div className="board-row">
           {this.renderSquare(0)}
@@ -68,6 +82,9 @@ class Board extends React.Component {
           {this.renderSquare(7)}
           {this.renderSquare(8)}
         </div>
+        <button onClick={() => this.handleResetClick()}>
+          Reset
+        </button>
       </div>
     );
   }
